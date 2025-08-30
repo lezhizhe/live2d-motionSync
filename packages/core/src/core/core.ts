@@ -22,10 +22,14 @@ export class MotionSyncCore {
   protected _motionSync: CubismMotionSync | null = null;
   protected _internalModel: InternalModel;
   protected _model: any;
+  protected _gainNode: GainNode | null = null;
   protected soundBuffer = new csmVector<number>();
   protected samplesPerSec: number;
   get audioContext() {
     return getAudioContext();
+  }
+  get gainNode() {
+    return this._gainNode;
   }
   constructor(internalModel: InternalModel, samplesPerSec = SamplesPerSec) {
     this._internalModel = internalModel;
@@ -33,6 +37,8 @@ export class MotionSyncCore {
     this.samplesPerSec = samplesPerSec;
     CubismMotionSync.startUp(new MotionSyncOption());
     CubismMotionSync.initialize();
+    this._gainNode = this.audioContext.createGain();
+    this._gainNode.gain.value = 1;
   }
 
   protected async loadAudio(url: string, stopOtherAudio = true) {
@@ -202,7 +208,11 @@ export class MotionSync extends MotionSyncCore {
       if (this.audioBuffer) {
         this.audioSource = this.audioContext.createBufferSource();
         this.audioSource.buffer = this.audioBuffer;
-        this.audioSource.connect(this.audioContext.destination);
+        if (this._gainNode) {
+          this.audioSource.connect(this._gainNode).connect(this.audioContext.destination);
+        } else {
+          this.audioSource.connect(this.audioContext.destination);
+        }
         this.audioSource.start(0);
         clearTimeout(this._timer);
         this.audioSource.onended = () => {
@@ -246,7 +256,11 @@ export class MotionSync extends MotionSyncCore {
       this.playNextSegment(); // 播放失败时尝试播放下一个
     }
   }
-
+  public setVolume(volume: number) {
+    if (this._gainNode) {
+      this._gainNode.gain.value = volume;
+    }
+  }
   public stop() {
     super.stop();
     this.audioQueue = [];
