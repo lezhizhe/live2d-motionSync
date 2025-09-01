@@ -7,7 +7,7 @@
   "description": "Live2D Motionsync, a lip-sync library for Live2D models.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/liyao1520/live2d-motionSync.git"
+    "url": "https://github.com/lezhizhe/live2d-motionSync.git"
   },
   "keywords": [
     "live2d",
@@ -33,6 +33,7 @@
   "scripts": {
     "dev": "cd examples && npm run dev",
     "build": "vite build",
+    "prepare": "pnpm run build",
     "predeploy": "cd examples && npm run build",
     "deploy": "gh-pages -d examples/dist"
   },
