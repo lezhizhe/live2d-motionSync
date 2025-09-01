@@ -2,26 +2,34 @@
 
 # live2d-motionsync
 
-[中文文档](./README_ZH.md)
-
 A live2d motionsync library
 
-![demo](./static/demo.gif)
+> 当前项目fork 自 [live2d-motionSync](https://github.com/GuanBin/live2d-motionSync)，感谢 liyao1520 的贡献。
 
-[codesandbox demo](https://codesandbox.io/p/sandbox/5yyr55?file=%2Fpackage.json%3A16%2C23)
+因为个人项目需要，对原有项目进行了一些升级改造！
 
-## Prerequisites
+## 开发环境准备
 
-1. **Only support Cubism 4 models**
+### 安装依赖
+```bash
+pnpm install
+```
 
-2. **Models need to support motionsync3**
+### 构建项目
+```bash
+pnpm run build
+```
 
-   Reference: https://docs.live2d.com/en/cubism-editor-manual/motion-sync/
+### 打包
+
+```bash
+pnpm pack
+```
 
 ## Install
 
 ```bash
-npm install live2d-motionsync
+pnpm add /path/live2d-motionsync.0.0.6.tgz
 ```
 
 ## Usage
@@ -130,6 +138,18 @@ Reset the `MotionSync` instance to its initial state.
 
 - **Description:**
   - This method stops any ongoing audio playback and resets the mouth state.
+
+
+### `setVolume(volume: number)`
+
+Set the volume of the `MotionSync`.
+
+- **Parameters:**
+
+  - `volume`: The volume of the `MotionSync`.
+
+- **Description:**
+  - This method sets the volume of the `MotionSync`. 1 is the maximum volume. 0 is the minimum volume means mute. It's work's by setting the gain of a GainNode value.
 
 ### `loadMotionSync(buffer: ArrayBuffer, samplesPerSec = SamplesPerSec)`
 
